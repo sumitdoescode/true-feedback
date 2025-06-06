@@ -1,7 +1,7 @@
 import Message from "@/models/Message";
 import User from "@/models/User";
 import connectDB from "@/lib/db";
-import { auth } from "clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 // This route handles fetching the user profile and their messages, dashboard

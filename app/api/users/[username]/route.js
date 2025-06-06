@@ -1,6 +1,6 @@
 import User from "@/models/User";
 import Message from "@/models/Message";
-import { auth } from "clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 
