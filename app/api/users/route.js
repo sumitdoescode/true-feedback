@@ -4,6 +4,7 @@ import connectDB from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+// GET => api/users
 // This route handles fetching the user profile and their messages, dashboard
 export const GET = async (request) => {
     try {

@@ -3,6 +3,10 @@ import { auth } from "@clerk/nextjs/server";
 import User from "@/models/User";
 import Message from "@/models/Message";
 import connectDB from "@/lib/db";
+import { isValidObjectId } from "mongoose";
+
+// DELETE => api/messages/[id]
+// route to delete a message by it's receiver
 export async function DELETE(request, { params }) {
     try {
         await connectDB();
@@ -18,8 +22,12 @@ export async function DELETE(request, { params }) {
 
         const { id } = params;
 
-        if (!id) {
+        if (!id || typeof id !== "string") {
             return NextResponse.json({ success: false, message: "Message ID is required" }, { status: 400 });
+        }
+        // Validate the ID format
+        if (!isValidObjectId(id)) {
+            return NextResponse.json({ success: false, message: "Invalid ID format" }, { status: 400 });
         }
 
         const message = await Message.findById(id);
