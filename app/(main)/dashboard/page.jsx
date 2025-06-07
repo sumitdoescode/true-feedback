@@ -50,7 +50,7 @@ const page = () => {
         <section className="flex-grow-1 pt-10 pb-20">
             <div className="container mx-auto px-2">
                 <h1 className="text-2xl md:text-3xl font-semibold">
-                    Hello, <span className="text-primary bg-primary-foreground px-2">sumitdoescode</span>
+                    Hello, <span className="text-primary bg-primary-foreground px-2">{data?.username}</span>
                 </h1>
                 <h3 className="mt-10 text-base">Share your unique link</h3>
                 <div className="max-w-2xl mt-2 flex flex-col sm:flex-row items-start sm:items-center gap-4">

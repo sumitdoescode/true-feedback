@@ -11,7 +11,6 @@ const NotFound = () => {
                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mt-6">
                         <span className="text-primary bg-primary-foreground px-2">404</span> Page not found.
                     </h1>
-                    {/* <Button>Go Bank</Button> */}
                     <Link href="/">
                         <Button className="mt-4 cursor-pointer" size={"lg"}>
                             Go to home

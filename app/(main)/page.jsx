@@ -1,8 +1,8 @@
-import Image from "next/image";
+"use client";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail } from "lucide-react";
-// import Autoplay from "embla-carousel-autoplay";
+import Autoplay from "embla-carousel-autoplay";
 
 const feedbacks = [
     {
@@ -49,11 +49,11 @@ export default function Home() {
                             align: "start",
                             loop: true,
                         }}
-                        // plugins={[
-                        //     Autoplay({
-                        //         delay: 2000,
-                        //     }),
-                        // ]}
+                        plugins={[
+                            Autoplay({
+                                delay: 4000,
+                            }),
+                        ]}
                     >
                         <CarouselContent>
                             {feedbacks.map(({ id, content, time }) => {
