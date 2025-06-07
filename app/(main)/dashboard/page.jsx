@@ -8,17 +8,22 @@ import Messages from "@/components/Messages";
 import axios from "axios";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const page = () => {
     const [data, setData] = useState({});
+    const [loading, setLoading] = useState(false);
     const [isAcceptingMessages, setIsAcceptingMessages] = useState(false);
 
     const fetchUserData = async () => {
         try {
+            setLoading(true);
             const { data } = await axios.get("/api/users");
             setData(data);
             setIsAcceptingMessages(data.isAcceptingMessages);
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             console.log(error);
             toast.error("Failed to fetch user data");
         }
@@ -29,6 +34,7 @@ const page = () => {
 
     const toggleAcceptMessages = async () => {
         try {
+            setLoading(true);
             const { data } = await axios.patch(`/api/users`);
             if (data.success) {
                 if (data.isAcceptingMessages) {
@@ -39,13 +45,20 @@ const page = () => {
                     toast.error("You are no longer accepting messages");
                 }
             }
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             console.log(error);
             toast.error("Failed to toggle accepting messages");
         }
     };
 
-    const profileLink = `https://truefeedback.vercel.app/u/${data.username}`;
+    const profileLink = `https://true-feedback-eight-rho.vercel.app/u/${data.username}`;
+
+    if (loading) {
+        return <LoadingSpinner />;
+    }
+
     return (
         <section className="flex-grow-1 pt-10 pb-20">
             <div className="container mx-auto px-2">
