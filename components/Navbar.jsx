@@ -13,14 +13,14 @@ const Navbar = () => {
                 <div className="flex items-center justify-between">
                     <div className="">
                         <Link href="/">
-                            <p className="text-2xl md:text-3xl font-medium sm:font-bold leading-1">True Feedback</p>
+                            <p className="text-xl sm:text-2xl md:text-3xl font-medium sm:font-bold leading-tight">True Feedback</p>
                         </Link>
                     </div>
                     <SignedIn>
-                        <div className="flex items-center gap-8">
+                        <div className="flex items-center gap-2 sm:gap-8">
                             {pathname !== "/dashboard" && (
-                                <Link href="/dashboard">
-                                    <Button className="text-base font-semibold rounded-lg" variant="outline">
+                                <Link href="/dashboard" className="">
+                                    <Button className="" variant="outline">
                                         Dashboard
                                     </Button>
                                 </Link>
