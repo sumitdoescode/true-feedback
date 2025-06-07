@@ -22,19 +22,23 @@ export const GET = async (request, { params }) => {
 
 // POST => api/users/[username]
 // This route handles sending a message to a user by their username
-export async function POST(request) {
+export async function POST(request, { params }) {
     try {
         await connectDB();
+        const { username } = params;
+        if (!username) {
+            return NextResponse.json({ success: false, message: "Username is required" }, { status: 400 });
+        }
 
-        const { content, username } = await request.json();
+        const { content } = await request.json();
 
-        if (!content || !username.trim()) {
+        if (!content) {
             return NextResponse.json({ success: false, message: "Content and username are required" }, { status: 400 });
         }
 
         const recipient = await User.findOne({ username: username.trim() });
         if (!recipient) {
-            return NextResponse.json({ error: "Recipient not found with that username" }, { status: 404 });
+            return NextResponse.json({ error: "User not found with that username" }, { status: 404 });
         }
 
         if (!recipient.isAcceptingMessages) {
@@ -45,6 +49,9 @@ export async function POST(request) {
             content: content.trim(),
             receiver: recipient._id,
         });
+
+        // Add the message to the recipient's messages array
+        await User.findByIdAndUpdate(recipient._id, { $push: { messages: message._id } }, { new: true });
 
         return NextResponse.json({ success: true, message: "Message sent successfully", data: message }, { status: 201 });
     } catch (error) {

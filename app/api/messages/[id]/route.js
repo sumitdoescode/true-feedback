@@ -20,7 +20,7 @@ export async function DELETE(request, { params }) {
             return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
         }
 
-        const { id } = params;
+        const { id } = await params;
 
         if (!id || typeof id !== "string") {
             return NextResponse.json({ success: false, message: "Message ID is required" }, { status: 400 });

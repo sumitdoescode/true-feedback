@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail } from "lucide-react";
+// import Autoplay from "embla-carousel-autoplay";
 
 const feedbacks = [
     {
@@ -42,7 +43,18 @@ export default function Home() {
                     <p className="mt-3 text-zinc-200 text-base md:text-lg">True Feedback - Where you identity remains a secret</p>
                 </div>
                 <div>
-                    <Carousel className="mt-10 max-w-xl mx-auto">
+                    <Carousel
+                        className="mt-10 max-w-xl mx-auto"
+                        opts={{
+                            align: "start",
+                            loop: true,
+                        }}
+                        // plugins={[
+                        //     Autoplay({
+                        //         delay: 2000,
+                        //     }),
+                        // ]}
+                    >
                         <CarouselContent>
                             {feedbacks.map(({ id, content, time }) => {
                                 return (

@@ -12,8 +12,11 @@ export const GET = async (request, { params }) => {
             return NextResponse.json({ success: false, message: "Username is required" }, { status: 401 });
         }
         const userExists = await User.exists({ username: username });
+        if (userExists === null) {
+            return NextResponse.json({ success: true, isValidUsername: false }, { status: 404 });
+        }
 
-        return NextResponse.json({ success: true, isValidUsername: !userExists }, { status: 200 });
+        return NextResponse.json({ success: true, isValidUsername: true }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ success: false, message: error.message || "Internal Server Error" }, { status: 500 });
     }
