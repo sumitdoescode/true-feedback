@@ -51,3 +51,5 @@ export default function RootLayout({ children }) {
         </ClerkProvider>
     );
 }
+
+// bro don't look here at the bottom of the file, focus on the top things
