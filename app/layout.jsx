@@ -16,7 +16,6 @@ export const metadata = {
     description: "Real feedback from real people.",
 };
 
-// this is a very faltu comment, will remove this later
 export default function RootLayout({ children }) {
     return (
         <ClerkProvider
