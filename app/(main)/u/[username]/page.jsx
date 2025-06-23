@@ -85,7 +85,9 @@ const page = () => {
         <section className="py-20 flex-grow-1">
             <div className="container mx-auto px-2">
                 {isValidUsername ? (
+                    // if username is valid
                     isAcceptingMessages ? (
+                        // user is accepting messages
                         <div>
                             <h1 className="text-2xl font-bold mb-4">
                                 Send Message to <span className="text-primary bg-primary-foreground px-2">{username}</span>
@@ -96,7 +98,8 @@ const page = () => {
                             </Button>
                         </div>
                     ) : (
-                        <div>
+                        // user is not accepting messages
+                        <div className="text-center">
                             <h1 className="text-3xl md:text-4xl font-semibold">Oops :(</h1>
                             <h1 className="text-2xl md:text-3xl font-bold mb-4 mt-6">
                                 <span className="text-primary bg-primary-foreground px-2">{username.trim()}</span> is not a accepting messages currently.
@@ -104,7 +107,8 @@ const page = () => {
                         </div>
                     )
                 ) : (
-                    <h1 className="text-2xl md:text-3xl font-bold">
+                    // if username is not valid
+                    <h1 className="text-2xl md:text-3xl font-bold text-center">
                         <span className="text-primary bg-primary-foreground px-2">{username}</span> is not a valid username.
                     </h1>
                 )}

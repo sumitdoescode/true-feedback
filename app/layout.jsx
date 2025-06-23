@@ -16,7 +16,6 @@ export const metadata = {
     description: "Real feedback from real people.",
 };
 
-// some bullshit thing here it goes
 export default function RootLayout({ children }) {
     return (
         <ClerkProvider
@@ -51,5 +50,3 @@ export default function RootLayout({ children }) {
         </ClerkProvider>
     );
 }
-
-// bro don't look here at the bottom of the file, focus on the top things
