@@ -34,7 +34,7 @@ const page = () => {
 
     const toggleAcceptMessages = async () => {
         try {
-            setLoading(true);
+            // setLoading(true);
             const { data } = await axios.patch(`/api/users`);
             if (data.success) {
                 if (data.isAcceptingMessages) {
@@ -45,9 +45,9 @@ const page = () => {
                     toast.error("You are no longer accepting messages");
                 }
             }
-            setLoading(false);
+            // setLoading(false);
         } catch (error) {
-            setLoading(false);
+            // setLoading(false);
             console.log(error);
             toast.error("Failed to toggle accepting messages");
         }
