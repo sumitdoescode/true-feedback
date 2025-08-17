@@ -42,6 +42,9 @@ export async function DELETE(request, { params }) {
 
         await Message.findByIdAndDelete(id);
 
+        // Remove the message from the user's messages array
+        await User.findByIdAndUpdate(user._id, { $pull: { messages: id } }, { new: true });
+
         return NextResponse.json({ success: true, message: "Message deleted successfully" }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ success: false, message: error.message || "Internal Server Error" }, { status: 500 });

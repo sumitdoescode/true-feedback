@@ -29,6 +29,7 @@ const page = () => {
                 if (data.isValidUsername) {
                     return setIsValidUsername(true);
                 }
+                // if username is not valid
                 setIsValidUsername(false);
             }
             setLoading(false);
