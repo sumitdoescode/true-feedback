@@ -77,7 +77,7 @@ const page = () => {
         }
     };
 
-    const profileLink = `https://true-feedback-eight-rho.vercel.app/u/${user.username}`;
+    const profileLink = `https://true-feedback-eight-rho.vercel.app/u/${user?.username}`;
 
     if (loading || !user) {
         return <LoadingSpinner />;
