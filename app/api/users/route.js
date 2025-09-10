@@ -24,7 +24,7 @@ export const GET = async (request) => {
         if (!user) {
             return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
         }
-        return NextResponse.json(user, { status: 200 });
+        return NextResponse.json({ success: true, data: { user } }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ success: false, message: error.message || "Internal Server Error" }, { status: 500 });
     }

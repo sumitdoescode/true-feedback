@@ -9,9 +9,11 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { pusherClient } from "@/lib/pusher-client";
 
 const page = () => {
-    const [data, setData] = useState({});
+    const [user, setUser] = useState(null);
+    const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isAcceptingMessages, setIsAcceptingMessages] = useState(false);
 
@@ -19,8 +21,9 @@ const page = () => {
         try {
             setLoading(true);
             const { data } = await axios.get("/api/users");
-            setData(data);
-            setIsAcceptingMessages(data.isAcceptingMessages);
+            setUser(data.data.user);
+            setMessages(data.data.user.messages);
+            setIsAcceptingMessages(data.data.user.isAcceptingMessages);
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -31,6 +34,27 @@ const page = () => {
     useEffect(() => {
         fetchUserData();
     }, []);
+
+    // pusher subscription for real time messages
+    useEffect(() => {
+        if (!user?._id) {
+            return;
+        }
+        const channelName = `user-${user._id}`;
+        pusherClient.subscribe(channelName);
+
+        const handleNewMessage = (newMessage) => {
+            setMessages((prev) => [newMessage, ...prev]);
+        };
+
+        pusherClient.bind("message_created", handleNewMessage);
+
+        // Cleanup on unmount or user change
+        return () => {
+            pusherClient.unbind("message_created", handleNewMessage);
+            pusherClient.unsubscribe(channelName);
+        };
+    }, [user?._id]);
 
     const toggleAcceptMessages = async () => {
         try {
@@ -53,9 +77,9 @@ const page = () => {
         }
     };
 
-    const profileLink = `https://true-feedback-eight-rho.vercel.app/u/${data.username}`;
+    const profileLink = `https://true-feedback-eight-rho.vercel.app/u/${user.username}`;
 
-    if (loading) {
+    if (loading || !user) {
         return <LoadingSpinner />;
     }
 
@@ -63,7 +87,7 @@ const page = () => {
         <section className="flex-grow-1 pt-10 pb-20">
             <div className="container mx-auto px-2">
                 <h1 className="text-2xl md:text-3xl font-semibold leading-0">
-                    hello, <span className="text-3xl md:text-4xl text-primary bg-primary-foreground px-2">{data?.username}</span>
+                    hello, <span className="text-3xl md:text-4xl text-primary bg-primary-foreground px-2">{user?.username}</span>
                 </h1>
                 <h3 className="mt-10 text-base text-neutral-400">Share your unique link</h3>
                 <div className="max-w-2xl mt-1 flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -78,7 +102,7 @@ const page = () => {
                     </Label>
                     <Switch id="toggle-accept-messages" size="lg" checked={isAcceptingMessages} onCheckedChange={toggleAcceptMessages} />
                 </div>
-                <Messages messages={data.messages} refetch={fetchUserData} />
+                <Messages messages={messages} refetch={fetchUserData} />
             </div>
         </section>
     );

@@ -3,6 +3,7 @@ import Message from "@/models/Message";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
+import { pusherServer } from "@/lib/pusher";
 
 // GET => api/users/[username]
 // Purpose: Check if a user with that username is accepting messages.
@@ -52,6 +53,9 @@ export async function POST(request, { params }) {
 
         // Add the message to the recipient's messages array
         await User.findByIdAndUpdate(recipient._id, { $push: { messages: message._id } }, { new: true });
+
+        // Send a message to the recipient's channel
+        await pusherServer.trigger(`user-${recipient._id}`, "message_created", message);
 
         return NextResponse.json({ success: true, message: "Message sent successfully", data: message }, { status: 201 });
     } catch (error) {
