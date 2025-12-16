@@ -1,4 +1,3 @@
-import Message from "@/models/Message";
 import User from "@/models/User";
 import connectDB from "@/lib/db";
 import { auth, currentUser, getAuth } from "@clerk/nextjs/server";
