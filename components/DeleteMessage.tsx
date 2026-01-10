@@ -21,7 +21,7 @@ const DeleteMessage = ({ messageId }: { messageId: string }) => {
 
    return (
       <AlertDialog>
-         <AlertDialogTrigger asChild>
+         <AlertDialogTrigger>
             <Button className="cursor-pointer" variant={"outline"} size={"icon"} disabled={isPending}>
                <Trash2 size={66} />
             </Button>
