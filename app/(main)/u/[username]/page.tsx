@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 
 const page = async ({ params }: { params: Promise<{ username: string }> }) => {
     const { username } = await params;
-    const res = await fetch(`http://localhost:3000/api/user/${username}`);
+    const res = await fetch(`${process.env.APPLICATION_BASE_URL}/api/user/${username}`);
     const data = await res.json();
 
     //    if user with that username doesn't exists
