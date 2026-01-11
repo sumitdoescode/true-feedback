@@ -9,7 +9,7 @@ import { getAuthUser } from "@/lib/getAuthUser";
 export interface SendMessageState {
     success?: boolean;
     message?: string;
-    error?: string;
+    error?: { content?: string[] };
 }
 
 export async function sendMessage(prevState: SendMessageState, formData: MessageType) {
