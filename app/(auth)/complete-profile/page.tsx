@@ -12,7 +12,7 @@ export default async function CompleteProfilePage() {
         redirect("/login");
     }
 
-    if (!session?.user?.isCompletedProfile) {
+    if (session?.user?.isCompletedProfile) {
         redirect("/dashboard");
     }
 
