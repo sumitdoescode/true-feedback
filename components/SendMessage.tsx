@@ -7,7 +7,8 @@ import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle }
 import { CircleAlert } from "lucide-react";
 import { sendMessage, SendMessageState } from "@/app/actions/message.action";
 import { toast } from "sonner";
-import { BadgeCheckIcon, ChevronRightIcon } from "lucide-react";
+import { BadgeCheckIcon } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 const SendMessage = ({ username }: { username: string }) => {
     const [formData, setFormData] = useState<MessageType>({ content: "", to: username });
@@ -78,7 +79,14 @@ const SendMessage = ({ username }: { username: string }) => {
                         );
                     })}
                 <Button type="submit" className="mt-4 w-full md:w-auto px-10" size={"lg"} variant={"default"} disabled={isPending}>
-                    {isPending ? "Sending..." : "Send"}
+                    {isPending ? (
+                        <>
+                            Sending...
+                            <Spinner />
+                        </>
+                    ) : (
+                        "Send"
+                    )}
                 </Button>
             </form>
             {success && (

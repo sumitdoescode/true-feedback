@@ -9,6 +9,7 @@ import { auth } from "@/auth";
 import ShareLink from "@/components/ShareLink";
 import ToggleAcceptMessages from "@/components/ToggleAcceptMessages";
 import UserMessages from "@/components/UserMessages";
+import UpdateProfileBtn from "@/components/UpdateProfileBtn";
 
 const page = async () => {
     const session = await auth.api.getSession({
@@ -73,6 +74,7 @@ const page = async () => {
                 </div>
                 <div className="flex flex-col md:flex-row gap-2 mt-6">
                     <ShareLink username={user?.username} />
+                    <UpdateProfileBtn />
                     <SignOut />
                 </div>
                 {/* accept messages */}

@@ -27,7 +27,7 @@ const ToggleAcceptMessages = ({ isAcceptingMessages }: { isAcceptingMessages: bo
         toggleAcceptMessages();
     };
     return (
-        <div className="flex items-center justify-between w-full md:max-w-md space-x-2 mt-6 bg-neutral-900 border px-4 py-2 rounded-md">
+        <div className="flex items-center justify-between w-full md:max-w-md space-x-2 mt-8 bg-neutral-900 border px-4 py-2 rounded-md">
             <Label htmlFor="toggle-accept-messages" className={"text-base text-neutral-200"}>
                 Accept Messages
             </Label>

@@ -11,10 +11,11 @@ import { flattenError } from "zod";
 import { startTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
 
-export function AuthUser({ usage }: { usage: "complete" | "update" }) {
+export function AuthUser({ usage, username }: { usage: "complete" | "update"; username?: string }) {
     const [formData, setFormData] = useState<AuthType>({
-        username: "",
+        username: username || "",
     });
 
     const router = useRouter();
@@ -104,7 +105,21 @@ export function AuthUser({ usage }: { usage: "complete" | "update" }) {
                     {error?.username && <FieldSeparator />}
                     <Field>
                         <Button type="submit" disabled={isPending}>
-                            {usage === "complete" ? (isPending ? "Completing..." : "Complete Profile") : isPending ? "Updating..." : "Update Profile"}
+                            {usage === "complete" ? (
+                                isPending ? (
+                                    <>
+                                        Completing... <Spinner />
+                                    </>
+                                ) : (
+                                    "Complete Profile"
+                                )
+                            ) : isPending ? (
+                                <>
+                                    Updating... <Spinner />
+                                </>
+                            ) : (
+                                "Update Profile"
+                            )}
                         </Button>
                     </Field>
                 </FieldGroup>
