@@ -21,7 +21,7 @@ const UserMessages = ({ messages }: { messages: IMessage[] }) => {
                 <p className="text-lg text-neutral-200 font-semibold">{messages.length > 1 ? "Messages" : "Message"}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
                 {messages.map((message: IMessage) => (
                     <UserMessage key={message._id} {...message} />
                 ))}
@@ -37,8 +37,8 @@ const UserMessage = ({ _id, content, createdAt }: IMessage) => {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className={"text-lg md:text-xl font-semibold"}>{content}</CardTitle>
-                <p className="text-neutral-400 text-xs sm:text-sm">{createdAt.toLocaleString()}</p>
+                <CardTitle className={"text-lg font-semibold"}>{content}</CardTitle>
+                <p className="text-neutral-400 text-xs">{createdAt.toLocaleString()}</p>
             </CardHeader>
             <CardFooter>
                 <DeleteMessage messageId={id} />
