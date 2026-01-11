@@ -1,22 +1,26 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/lib/getCurrentUser";
 import { CompleteProfile } from "@/components/CompleteProfile";
+import { auth } from "@/auth";
+import { headers } from "next/headers";
 
 export default async function CompleteProfilePage() {
-   const user = await getCurrentUser();
-   if (user === "UNAUTHORIZED") {
-      return redirect("/login");
-   }
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
 
-   if (user === "AUTHORIZED") {
-      return redirect("/dashboard");
-   }
+    if (!session) {
+        redirect("/login");
+    }
 
-   return (
-      <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-         <div className="w-full max-w-sm">
-            <CompleteProfile />
-         </div>
-      </div>
-   );
+    if (!session?.user?.isCompletedProfile) {
+        redirect("/dashboard");
+    }
+
+    return (
+        <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+            <div className="w-full max-w-sm">
+                <CompleteProfile />
+            </div>
+        </div>
+    );
 }

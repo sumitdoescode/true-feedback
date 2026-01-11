@@ -8,38 +8,38 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const DeleteMessage = ({ messageId }: { messageId: string }) => {
-   const [isPending, startTransition] = useTransition();
-   const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    const router = useRouter();
 
-   const handleDeleteMessage = () => {
-      startTransition(() => {
-         deleteMessage(messageId);
-         toast.success("Message deleted successfully");
-         router.refresh();
-      });
-   };
+    const handleDeleteMessage = () => {
+        startTransition(() => {
+            deleteMessage({ messageId });
+            toast.success("Message deleted successfully");
+            router.refresh();
+        });
+    };
 
-   return (
-      <AlertDialog>
-         <AlertDialogTrigger>
-            <Button className="cursor-pointer" variant={"outline"} size={"icon"} disabled={isPending}>
-               <Trash2 size={66} />
-            </Button>
-         </AlertDialogTrigger>
-         <AlertDialogContent>
-            <AlertDialogHeader>
-               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-               <AlertDialogDescription>This action cannot be undone. This will permanently delete your message</AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-               <AlertDialogCancel>Cancel</AlertDialogCancel>
-               <AlertDialogAction onClick={handleDeleteMessage} disabled={isPending}>
-                  Continue
-               </AlertDialogAction>
-            </AlertDialogFooter>
-         </AlertDialogContent>
-      </AlertDialog>
-   );
+    return (
+        <AlertDialog>
+            <AlertDialogTrigger>
+                <div className="cursor-pointer p-2 rounded bg-primary/10 hover:bg-primary/20">
+                    <Trash2 size={20} className="text-primary" />
+                </div>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>This action cannot be undone. This will permanently delete your message</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDeleteMessage} disabled={isPending}>
+                        Continue
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    );
 };
 
 export default DeleteMessage;
