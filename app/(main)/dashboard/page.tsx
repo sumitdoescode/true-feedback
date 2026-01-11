@@ -71,7 +71,7 @@ const page = async () => {
                         <p className="text-neutral-300 text-base">@{user.username}</p>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 mt-4">
+                <div className="flex flex-col md:flex-row gap-2 mt-6">
                     <ShareLink username={user?.username} />
                     <SignOut />
                 </div>

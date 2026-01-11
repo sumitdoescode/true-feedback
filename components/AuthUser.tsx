@@ -4,16 +4,16 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { flattenError } from "zod";
 import { useState, useActionState, useEffect } from "react";
-import { CompleteProfileSchema, CompleteProfileType } from "@/schemas/auth.schema";
-import { completeProfile, CompleteProfileState } from "@/app/actions/auth.actions";
+import { CompleteProfile, UpdateProfile, AuthState } from "@/app/actions/auth.actions";
+import { AuthSchema, AuthType } from "@/schemas/auth.schema";
+import { flattenError } from "zod";
 import { startTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-export function CompleteProfile({ className, ...props }: React.ComponentProps<"div">) {
-    const [formData, setFormData] = useState<CompleteProfileType>({
+export function AuthUser({ usage }: { usage: "complete" | "update" }) {
+    const [formData, setFormData] = useState<AuthType>({
         username: "",
     });
 
@@ -21,13 +21,13 @@ export function CompleteProfile({ className, ...props }: React.ComponentProps<"d
 
     const [error, setError] = useState<{ username?: string[] }>({});
 
-    const initialState: CompleteProfileState = {
+    const initialState: AuthState = {
         success: false,
         message: "",
         error: {},
     };
 
-    const [state, action, isPending] = useActionState<CompleteProfileState, CompleteProfileType>(completeProfile, initialState);
+    const [state, action, isPending] = useActionState<AuthState, AuthType>(usage === "complete" ? CompleteProfile : UpdateProfile, initialState);
 
     // server side validation response handling
     useEffect(() => {
@@ -45,14 +45,18 @@ export function CompleteProfile({ className, ...props }: React.ComponentProps<"d
             }
         }
         toast.success(message);
-        router.refresh();
+        if (usage === "complete") {
+            router.refresh();
+        } else {
+            router.push("/dashboard");
+        }
     }, [state]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // Client-side validation
-        const result = CompleteProfileSchema.safeParse(formData);
+        const result = AuthSchema.safeParse(formData);
         if (!result.success) {
             return setError(flattenError(result.error).fieldErrors);
         }
@@ -63,7 +67,7 @@ export function CompleteProfile({ className, ...props }: React.ComponentProps<"d
     };
 
     return (
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
+        <div className={cn("flex flex-col gap-6")}>
             <form onSubmit={handleSubmit}>
                 <FieldGroup>
                     <div className="flex flex-col items-center gap-2 text-center">
@@ -73,8 +77,8 @@ export function CompleteProfile({ className, ...props }: React.ComponentProps<"d
                             </div>
                             <span className="sr-only">True Feedback.</span>
                         </a>
-                        <h1 className="text-xl font-bold">Welcome to True Feedback.</h1>
-                        <FieldDescription>Choose a unique username to get started.</FieldDescription>
+                        <h1 className="text-xl font-bold">{usage === "complete" ? "Welcome to True Feedback." : "Update Your Username"}</h1>
+                        <FieldDescription>{usage === "complete" ? "Choose a unique username to get started." : "Choose a unique username to update your profile."}</FieldDescription>
                     </div>
                     <Field>
                         <FieldLabel htmlFor="username">Username</FieldLabel>
@@ -100,7 +104,7 @@ export function CompleteProfile({ className, ...props }: React.ComponentProps<"d
                     {error?.username && <FieldSeparator />}
                     <Field>
                         <Button type="submit" disabled={isPending}>
-                            {isPending ? "Completing..." : "Complete Profile"}
+                            {usage === "complete" ? (isPending ? "Completing..." : "Complete Profile") : isPending ? "Updating..." : "Update Profile"}
                         </Button>
                     </Field>
                 </FieldGroup>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const CompleteProfileSchema = z.object({
+export const AuthSchema = z.object({
     username: z
         .string()
         .regex(/^(?![._])(?!.*[._]{2})[a-z._]+(?<![._])$/, "Username can contain lowercase letters, dots and underscores only")
@@ -10,4 +10,4 @@ export const CompleteProfileSchema = z.object({
 
 // working ?
 
-export type CompleteProfileType = z.infer<typeof CompleteProfileSchema>;
+export type AuthType = z.infer<typeof AuthSchema>;

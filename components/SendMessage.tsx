@@ -77,7 +77,7 @@ const SendMessage = ({ username }: { username: string }) => {
                             </div>
                         );
                     })}
-                <Button type="submit" className="mt-4 w-full" size={"lg"} variant={"default"} disabled={isPending}>
+                <Button type="submit" className="mt-4 w-full md:w-auto px-10" size={"lg"} variant={"default"} disabled={isPending}>
                     {isPending ? "Sending..." : "Send"}
                 </Button>
             </form>
