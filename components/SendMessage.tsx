@@ -9,11 +9,13 @@ import { sendMessage, SendMessageState } from "@/app/actions/message.action";
 import { toast } from "sonner";
 import { BadgeCheckIcon } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import axios from "axios";
 
 const SendMessage = ({ username }: { username: string }) => {
     const [formData, setFormData] = useState<MessageType>({ content: "", to: username });
     const [errors, setErrors] = useState<{ content?: string[] }>({});
     const [success, setSuccess] = useState<boolean>(false);
+    const [generating, setGenerating] = useState<boolean>(false);
 
     const initialState: SendMessageState = {
         success: false,
@@ -22,6 +24,22 @@ const SendMessage = ({ username }: { username: string }) => {
     };
 
     const [state, action, isPending] = useActionState<SendMessageState, MessageType>(sendMessage, initialState);
+
+    const generateMessage = async () => {
+        try {
+            setGenerating(true);
+            const { data } = await axios.get(`/api/message`);
+            if (!data.success) {
+                toast.error("Something went wrong");
+                return;
+            }
+            setFormData({ ...formData, content: data.data });
+        } catch (error) {
+            toast.error("Something went wrong");
+        } finally {
+            setGenerating(false);
+        }
+    };
 
     useEffect(() => {
         if (!state) return;
@@ -78,16 +96,28 @@ const SendMessage = ({ username }: { username: string }) => {
                             </div>
                         );
                     })}
-                <Button type="submit" className="mt-4 w-full md:w-auto px-10" size={"lg"} variant={"default"} disabled={isPending}>
-                    {isPending ? (
-                        <>
-                            Sending...
-                            <Spinner />
-                        </>
-                    ) : (
-                        "Send"
-                    )}
-                </Button>
+                <div className="flex items-center mt-4 gap-2 ">
+                    <Button type="submit" className="grow cursor-pointer" size={"lg"} variant={"default"} disabled={isPending || generating}>
+                        {isPending ? (
+                            <>
+                                Sending...
+                                <Spinner />
+                            </>
+                        ) : (
+                            "Send"
+                        )}
+                    </Button>
+                    <Button className="grow cursor-pointer" size={"lg"} variant={"secondary"} onClick={generateMessage} disabled={generating || isPending}>
+                        {generating ? (
+                            <>
+                                Generating...
+                                <Spinner />
+                            </>
+                        ) : (
+                            "Generate Message with AI"
+                        )}
+                    </Button>
+                </div>
             </form>
             {success && (
                 <Item variant="outline" size="sm" className="mt-6">

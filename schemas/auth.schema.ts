@@ -8,6 +8,4 @@ export const AuthSchema = z.object({
         .max(16, "Username must be at most 16 characters long"),
 });
 
-// working ?
-
 export type AuthType = z.infer<typeof AuthSchema>;

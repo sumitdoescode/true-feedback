@@ -18,6 +18,8 @@ export const auth = betterAuth({
             return {
                 user: {
                     ...user,
+
+                    // adding these two new field inside user object
                     username: dbUser ? dbUser.username : null,
                     isCompletedProfile: !!dbUser,
                 },
