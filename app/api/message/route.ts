@@ -1,4 +1,3 @@
-import { streamText, UIMessage, convertToModelMessages } from "ai";
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
