@@ -1,21 +1,27 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 
-const messageSchema = new Schema(
-   {
-      content: {
-         type: String,
-         required: true,
-         trim: true,
-      },
-      receiver: {
-         type: Schema.Types.ObjectId,
-         ref: "User",
-      },
-   },
+export interface IMessage extends mongoose.Document {
+    content: string;
+    receiver: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
 
-   { timestamps: true }
+const messageSchema = new mongoose.Schema(
+    {
+        content: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        receiver: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
+    },
+    { timestamps: true },
 );
 
-const Message = mongoose.models.Message || model("Message", messageSchema);
+const Message = models.Message || model("Message", messageSchema);
 
 export default Message;

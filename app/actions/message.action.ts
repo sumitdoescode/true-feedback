@@ -2,7 +2,6 @@
 import { MessageSchema, MessageType } from "@/schemas/message.schema";
 import { connectDB } from "@/lib/db";
 import { z } from "zod";
-import User from "@/models/User";
 import Message from "@/models/Message";
 import { getAuthUser } from "@/lib/getAuthUser";
 

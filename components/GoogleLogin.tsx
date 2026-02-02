@@ -6,7 +6,7 @@ const GoogleLogin = () => {
     const loginWithGoogle = async () => {
         const data = await authClient.signIn.social({
             provider: "google",
-            callbackURL: "/complete-profile",
+            callbackURL: "/dashboard",
         });
     };
 

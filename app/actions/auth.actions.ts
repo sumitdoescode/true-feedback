@@ -1,7 +1,6 @@
 "use server";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import User from "@/models/User";
 import { connectDB } from "@/lib/db";
 import { AuthSchema, AuthType } from "@/schemas/auth.schema";
 import { flattenError } from "zod";
