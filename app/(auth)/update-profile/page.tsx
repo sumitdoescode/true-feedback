@@ -1,10 +1,10 @@
-import { AuthUser } from "@/components/AuthUser";
+import { UpdateProfileForm } from "@/components/UpdateProfileForm";
 
 const page = async () => {
     return (
         <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
             <div className="w-full max-w-sm">
-                <AuthUser usage="update" />
+                <UpdateProfileForm />
             </div>
         </div>
     );

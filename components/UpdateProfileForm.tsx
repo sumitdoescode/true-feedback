@@ -4,69 +4,49 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useState, useActionState, useEffect } from "react";
-import { CompleteProfile, UpdateProfile, AuthState } from "@/app/actions/auth.actions";
-import { AuthSchema, AuthType } from "@/schemas/auth.schema";
+import { useState } from "react";
+import { UpdateProfileSchema, UpdateProfileType } from "@/schemas/profile.schema";
+import { UpdateProfile } from "@/app/actions/profile.action";
 import { flattenError } from "zod";
-import { startTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 import { authClient } from "@/lib/auth-client"; // import the auth client
 
-export function AuthUser({ usage }: { usage: "complete" | "update" }) {
-    const { data: session, refetch } = authClient.useSession();
-    const [formData, setFormData] = useState<AuthType>({
-        username: "",
-    });
-
+export function UpdateProfileForm() {
     const router = useRouter();
 
+    const [formData, setFormData] = useState<UpdateProfileType>({
+        username: "",
+    });
     const [error, setError] = useState<{ username?: string[] }>({});
+    const [isPending, setIsPending] = useState(false);
 
-    const initialState: AuthState = {
-        success: false,
-        message: "",
-        error: {},
-    };
-
-    const [state, action, isPending] = useActionState<AuthState, AuthType>(usage === "complete" ? CompleteProfile : UpdateProfile, initialState);
-
-    // server side validation response handling
-    useEffect(() => {
-        if (!state) return;
-        const { success, error, message } = state;
-        if (!success) {
-            if (error) {
-                // this will show the error in the form
-                setError(error);
-                return;
-            }
-            if (message) {
-                toast.error(message);
-                return;
-            }
-        }
-        toast.success(message);
-        if (usage === "complete") {
-            router.refresh();
-        } else {
-            router.push("/dashboard");
-        }
-    }, [state]);
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // Client-side validation
-        const result = AuthSchema.safeParse(formData);
+        const result = UpdateProfileSchema.safeParse(formData);
         if (!result.success) {
             return setError(flattenError(result.error).fieldErrors);
         }
 
-        startTransition(() => {
-            action(formData);
-        });
+        // calling the action function
+        setIsPending(true);
+        const res = await UpdateProfile(result.data);
+        setIsPending(false);
+        if (!res.success) {
+            if (res.error) {
+                setError(res.error);
+            }
+            if (res.message) {
+                toast.error(res.message);
+            }
+            return;
+        }
+
+        toast.success(res.message);
+        router.push("/dashboard");
     };
 
     return (
@@ -80,8 +60,8 @@ export function AuthUser({ usage }: { usage: "complete" | "update" }) {
                             </div>
                             <span className="sr-only">True Feedback.</span>
                         </a>
-                        <h1 className="text-xl font-bold">{usage === "complete" ? "Welcome to True Feedback." : "Update Your Username"}</h1>
-                        <FieldDescription>{usage === "complete" ? "Choose a unique username to get started." : "Choose a unique username to update your profile."}</FieldDescription>
+                        <h1 className="text-xl font-bold">Update Your Username</h1>
+                        <FieldDescription>Choose a unique username to update your profile.</FieldDescription>
                     </div>
                     <Field>
                         <FieldLabel htmlFor="username">Username</FieldLabel>
@@ -107,15 +87,7 @@ export function AuthUser({ usage }: { usage: "complete" | "update" }) {
                     {error?.username && <FieldSeparator />}
                     <Field>
                         <Button type="submit" disabled={isPending}>
-                            {usage === "complete" ? (
-                                isPending ? (
-                                    <>
-                                        Completing... <Spinner />
-                                    </>
-                                ) : (
-                                    "Complete Profile"
-                                )
-                            ) : isPending ? (
+                            {isPending ? (
                                 <>
                                     Updating... <Spinner />
                                 </>

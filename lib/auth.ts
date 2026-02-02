@@ -9,11 +9,19 @@ const db = client.db("true-feedback-dev");
 
 export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_URL!,
+
     database: mongodbAdapter(db),
 
     emailAndPassword: {
         enabled: true,
     },
+
+    plugins: [
+        username({
+            minUsernameLength: 3,
+            maxUsernameLength: 20,
+        }),
+    ],
 
     user: {
         additionalFields: {
@@ -23,12 +31,8 @@ export const auth = betterAuth({
             },
         },
     },
-    plugins: [
-        username({
-            minUsernameLength: 3,
-            maxUsernameLength: 20,
-        }),
-    ],
+
+    // adding a autogenerate username to database
     hooks: {
         after: createAuthMiddleware(async (ctx) => {
             const newUser = ctx.context.newSession?.user;
@@ -38,7 +42,7 @@ export const auth = betterAuth({
             if (userDoc?.username) return;
 
             const generatedUsername = newUser.email.split("@")[0];
-            console.log(generatedUsername);
+
             await db.collection("user").updateOne(
                 { _id: new ObjectId(newUser.id) },
                 {
@@ -50,6 +54,7 @@ export const auth = betterAuth({
             );
         }),
     },
+
     socialProviders: {
         google: {
             clientId: process.env.GOOGLE_CLIENT_ID!,
