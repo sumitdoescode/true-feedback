@@ -1,7 +1,5 @@
 "use client";
-import React from "react";
 import { Button } from "@/components/ui/button";
-
 import { authClient } from "@/lib/auth-client";
 
 const GoogleLogin = () => {
@@ -10,7 +8,6 @@ const GoogleLogin = () => {
             provider: "google",
             callbackURL: "/complete-profile",
         });
-        console.log(data);
     };
 
     return (

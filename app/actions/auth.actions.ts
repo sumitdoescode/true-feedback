@@ -27,12 +27,12 @@ export async function CompleteProfile(_: any, formData: AuthType) {
 
     const { username } = data;
 
-    //    we don't' need to check username exists or not as we have already validated it using schema
+    // we don't need to check username exists or not as we have already validated it using schema
 
     try {
         await connectDB();
 
-        //    check if the username already exists
+        //  check if the username already exists
         const user = await User.findOne({ username: username });
         if (user) {
             return { success: false, error: { username: ["Username already exists"] } };
@@ -85,7 +85,7 @@ export async function UpdateProfile(_: any, formData: AuthType) {
             { email: session?.user?.email },
             {
                 username: username,
-            }
+            },
         );
 
         return { success: true, message: "Username updated successfully" };

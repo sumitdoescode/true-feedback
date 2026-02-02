@@ -12,10 +12,12 @@ import { startTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
+import { authClient } from "@/lib/auth-client"; // import the auth client
 
-export function AuthUser({ usage, username }: { usage: "complete" | "update"; username?: string }) {
+export function AuthUser({ usage }: { usage: "complete" | "update" }) {
+    const { data: session, refetch } = authClient.useSession();
     const [formData, setFormData] = useState<AuthType>({
-        username: username || "",
+        username: "",
     });
 
     const router = useRouter();
