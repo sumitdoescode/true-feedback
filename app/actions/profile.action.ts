@@ -22,7 +22,7 @@ export async function UpdateProfile(formData: UpdateProfileType) {
 
         const { username } = data;
 
-        //    we don't' need to check username exists or not as we have already validated it using schema
+        //    we don't need to check username exists or not as we have already validated it using schema
         const response = await auth.api.isUsernameAvailable({
             headers: await headers(),
             body: {

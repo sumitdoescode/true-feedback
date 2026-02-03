@@ -23,14 +23,14 @@ export const auth = betterAuth({
         }),
     ],
 
-    user: {
-        additionalFields: {
-            isAcceptingMessages: {
-                type: "boolean",
-                defaultValue: true,
-            },
-        },
-    },
+    // user: {
+    //     additionalFields: {
+    //         isAcceptingMessages: {
+    //             type: "boolean",
+    //             defaultValue: true,
+    //         },
+    //     },
+    // },
 
     // adding a autogenerate username to database
     hooks: {
