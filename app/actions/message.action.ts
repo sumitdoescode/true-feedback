@@ -22,15 +22,16 @@ export async function sendMessage(prevState: SendMessageState, formData: Message
         }
         // to whom we need to send the message
         const { content, to } = data;
-        const user = await User.findOne({ username: to });
-        if (!user) {
-            return { success: false, message: "User not found" };
-        }
-        if (!user.isAcceptingMessages) {
-            return { success: false, message: "User is not accepting messages" };
-        }
+        // const user = await User.findOne({ username: to });
+        // if (!user) {
+        //     return { success: false, message: "User not found" };
+        // }
+        // if (!user.isAcceptingMessages) {
+        //     return { success: false, message: "User is not accepting messages" };
+        // }
 
-        const message = await Message.create({ content, receiver: user._id });
+        // const message = await Message.create({ content, receiver: user._id });
+
         await message.save();
 
         return { success: true, message: "Message sent successfully" };
@@ -46,10 +47,10 @@ export async function deleteMessage({ messageId }: { messageId: string }) {
         if (!loggedInUser) {
             return { success: false, message: "Unauthorized" };
         }
-        const user = await User.findOne({ email: loggedInUser.email });
-        if (!user) {
-            return { success: false, message: "User not found" };
-        }
+        // const user = await User.findOne({ email: loggedInUser.email });
+        // if (!user) {
+        //     return { success: false, message: "User not found" };
+        // }
         // find the message
         const message = await Message.findById(messageId);
         if (!message) {
@@ -57,9 +58,9 @@ export async function deleteMessage({ messageId }: { messageId: string }) {
         }
 
         //   check if the message is sent to the user
-        if (message.receiver.toString() !== user._id.toString()) {
-            return { success: false, message: "Unauthorized" };
-        }
+        // if (message.receiver.toString() !== user._id.toString()) {
+        //     return { success: false, message: "Unauthorized" };
+        // }
 
         await message.deleteOne();
 

@@ -15,7 +15,7 @@ const page = async () => {
         headers: await headers(),
     });
 
-    console.log(session);
+    // console.log(session);
 
     // if (!session) {
     //     redirect("/login");

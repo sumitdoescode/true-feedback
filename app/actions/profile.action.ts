@@ -23,20 +23,23 @@ export async function UpdateProfile(formData: UpdateProfileType) {
         const { username } = data;
 
         //    we don't' need to check username exists or not as we have already validated it using schema
+        const response = await auth.api.isUsernameAvailable({
+            headers: await headers(),
+            body: {
+                username: username,
+            },
+        });
 
-        // //    check if the username already exists
-        // const user = await User.findOne({ username: username });
-        // if (user) {
-        //     return { success: false, error: { username: ["Username already exists"] } };
-        // }
+        if (!response?.available) {
+            return { success: false, error: { username: ["Username already exists"] } };
+        }
 
-        // // update the username
-        // await User.findOneAndUpdate(
-        //     { email: session?.user?.email },
-        //     {
-        //         username: username,
-        //     },
-        // );
+        const a = await auth.api.updateUser({
+            headers: await headers(),
+            body: {
+                username: username,
+            },
+        });
 
         return { success: true, message: "Username updated successfully" };
     } catch (error: any) {

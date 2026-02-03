@@ -11,13 +11,13 @@ import { flattenError } from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
-import { authClient } from "@/lib/auth-client"; // import the auth client
+import { authClient } from "@/lib/auth-client";
 
-export function UpdateProfileForm() {
+export function UpdateProfileForm({ username }: { username: string | null | undefined }) {
     const router = useRouter();
 
     const [formData, setFormData] = useState<UpdateProfileType>({
-        username: "",
+        username: username || "",
     });
     const [error, setError] = useState<{ username?: string[] }>({});
     const [isPending, setIsPending] = useState(false);
