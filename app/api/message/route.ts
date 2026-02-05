@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server";
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function GET(request: NextRequest) {
+    const headersList = request.headers;
     try {
         const response = await ai.models.generateContent({
             model: `${process.env.AI_MODEL_NAME}`,
