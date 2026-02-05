@@ -7,18 +7,19 @@ const userSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
-
         email: {
             type: String,
             required: true,
             unique: true,
-            trim: true,
+        },
+        emailVerified: {
+            type: Boolean,
+            required: true,
         },
         username: {
             type: String,
             required: true,
             unique: true,
-            trim: true,
         },
         image: {
             type: String,
@@ -29,7 +30,6 @@ const userSchema = new mongoose.Schema(
         },
     },
     {
-        collection: "user",
         timestamps: true,
     },
 );

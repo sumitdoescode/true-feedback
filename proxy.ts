@@ -23,10 +23,6 @@ export async function proxy(request: NextRequest) {
         if (!session?.user) {
             return NextResponse.redirect(new URL("/login", request.url));
         }
-
-        if (!session?.user?.username) {
-            return NextResponse.redirect(new URL("/login", request.url));
-        }
     }
     return NextResponse.next();
 }

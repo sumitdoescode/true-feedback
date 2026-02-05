@@ -1,58 +1,46 @@
 import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { createAuthMiddleware, username } from "better-auth/plugins";
-import { ObjectId } from "mongodb";
+import { createAuthMiddleware } from "better-auth/plugins";
+import User from "@/models/User";
+import { connectDB } from "./db";
 
 const client = new MongoClient(process.env.MONGODB_URI!);
 const db = client.db("true-feedback-dev");
 
 export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_URL!,
-
     database: mongodbAdapter(db),
 
-    emailAndPassword: {
-        enabled: true,
-    },
-
-    plugins: [
-        username({
-            minUsernameLength: 3,
-            maxUsernameLength: 20,
-        }),
-    ],
-
-    // user: {
-    //     additionalFields: {
-    //         isAcceptingMessages: {
-    //             type: "boolean",
-    //             defaultValue: true,
-    //         },
-    //     },
-    // },
-
     // adding a autogenerate username to database
-    hooks: {
-        after: createAuthMiddleware(async (ctx) => {
-            const newUser = ctx.context.newSession?.user;
-
-            if (!newUser) return;
-            const userDoc = await db.collection("user").findOne({ email: newUser.email });
-            if (userDoc?.username) return;
-
-            const generatedUsername = newUser.email.split("@")[0];
-
-            await db.collection("user").updateOne(
-                { _id: new ObjectId(newUser.id) },
-                {
-                    $set: {
-                        username: generatedUsername,
-                        displayUsername: generatedUsername,
-                    },
+    databaseHooks: {
+        user: {
+            create: {
+                after: async (user) => {
+                    await connectDB();
+                    await User.create({
+                        name: user.name,
+                        email: user.email,
+                        emailVerified: user.emailVerified,
+                        username: user.email.split("@")[0],
+                        image: user.image,
+                        isAcceptingMessages: true,
+                    });
                 },
-            );
-        }),
+            },
+            delete: {
+                after: async (user) => {
+                    try {
+                        await connectDB();
+
+                        await User.deleteOne({ email: user.email });
+                        console.log(`Successfully cleaned up Mongoose data for user: ${user.id}`);
+                    } catch (error) {
+                        console.error("Failed to delete Mongoose user during cleanup:", error);
+                    }
+                },
+            },
+        },
     },
 
     socialProviders: {
