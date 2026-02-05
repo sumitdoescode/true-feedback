@@ -26,7 +26,7 @@ const SendMessage = ({ username }: { username: string }) => {
                 toast.error("Something went wrong");
                 return;
             }
-            setFormData({ ...formData, content: data.data });
+            setFormData({ ...formData, content: data.content });
         } catch (error) {
             toast.error("Something went wrong");
         } finally {
