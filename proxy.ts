@@ -1,11 +1,8 @@
-import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 
 export async function proxy(request: NextRequest) {
     const isLoginPage = request.nextUrl.pathname === "/login";
-    const isUpdateProfilePage = request.nextUrl.pathname === "/update-profile";
 
     const session = await auth.api.getSession({
         headers: request.headers,
@@ -16,17 +13,17 @@ export async function proxy(request: NextRequest) {
         if (session?.user) {
             return NextResponse.redirect(new URL("/dashboard", request.url));
         }
+        return NextResponse.next();
     }
 
-    // if user is trying to get to update-profile page
-    if (isUpdateProfilePage) {
-        if (!session?.user) {
-            return NextResponse.redirect(new URL("/login", request.url));
-        }
+    // that means user is on trying to get on other pages
+    if (!session?.user) {
+        return NextResponse.redirect(new URL("/login", request.url));
     }
+
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/login", "/complete-profile", "/update-profile"],
+    matcher: ["/login", "/update-profile", "/dashboard"],
 };

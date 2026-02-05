@@ -2,11 +2,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Container from "@/components/Container";
 import SendMessage from "@/components/SendMessage";
 import { OctagonX } from "lucide-react";
-import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { notFound } from "next/navigation";
 
-const UserProfile = async ({ params }: { params: Promise<{ username: string }> }) => {
-    const { username } = await params;
+const UserProfile = async ({ username }: { username: string }) => {
     const res = await fetch(`${process.env.APPLICATION_BASE_URL}/api/user/${username}`);
     const data = await res.json();
 

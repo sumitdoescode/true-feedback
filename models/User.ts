@@ -1,6 +1,6 @@
-import mongoose, { models, model, Schema } from "mongoose";
+import { models, model, Schema } from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
     {
         name: {
             type: String,
@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema(
         email: {
             type: String,
             required: true,
-            unique: true,
         },
         emailVerified: {
             type: Boolean,
@@ -19,7 +18,6 @@ const userSchema = new mongoose.Schema(
         username: {
             type: String,
             required: true,
-            unique: true,
         },
         image: {
             type: String,
@@ -33,6 +31,12 @@ const userSchema = new mongoose.Schema(
         timestamps: true,
     },
 );
+
+// index for email
+userSchema.index({ email: 1 });
+
+// index of username field
+userSchema.index({ username: 1 });
 
 const User = models.User || model("User", userSchema);
 

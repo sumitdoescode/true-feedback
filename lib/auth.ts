@@ -1,8 +1,8 @@
 import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { createAuthMiddleware } from "better-auth/plugins";
 import User from "@/models/User";
+import Message from "@/models/Message";
 import { connectDB } from "./db";
 
 const client = new MongoClient(process.env.MONGODB_URI!);
@@ -32,8 +32,12 @@ export const auth = betterAuth({
                 after: async (user) => {
                     try {
                         await connectDB();
-
-                        await User.deleteOne({ email: user.email });
+                        const dbUser = await User.findOne({ email: user.email });
+                        if (!dbUser) {
+                            return;
+                        }
+                        await Message.deleteMany({ receiver: dbUser._id });
+                        await dbUser.deleteOne();
                         console.log(`Successfully cleaned up Mongoose data for user: ${user.id}`);
                     } catch (error) {
                         console.error("Failed to delete Mongoose user during cleanup:", error);

@@ -1,8 +1,7 @@
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import DeleteMessage from "./DeleteMessage";
+import UserMessage from "./UserMessage";
 
-interface IMessage {
+export interface IMessage {
     _id: string;
     content: string;
     createdAt: Date;
@@ -31,18 +30,3 @@ const UserMessages = ({ messages }: { messages: IMessage[] }) => {
 };
 
 export default UserMessages;
-
-const UserMessage = ({ _id, content, createdAt }: IMessage) => {
-    const id = _id.toString();
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle className={"text-base font-medium"}>{content}</CardTitle>
-                <p className="text-neutral-400 text-xs">{createdAt.toLocaleString()}</p>
-            </CardHeader>
-            <CardFooter>
-                <DeleteMessage messageId={id} />
-            </CardFooter>
-        </Card>
-    );
-};

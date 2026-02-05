@@ -1,7 +1,4 @@
 import { UpdateProfileForm } from "@/components/UpdateProfileForm";
-import { auth } from "@/lib/auth"; // path to your Better Auth server instance
-import { headers } from "next/headers";
-import { Suspense } from "react";
 
 const Page = async () => {
     return (

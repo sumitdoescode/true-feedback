@@ -6,13 +6,13 @@ import UserMessages from "@/components/UserMessages";
 import UpdateProfileBtn from "@/components/UpdateProfileBtn";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { headers } from "next/headers";
+import DeleteAccount from "@/components/DeleteAccount";
 
 const Dashboard = async () => {
     const res = await fetch(`${process.env.APPLICATION_BASE_URL}/api/user`, {
         headers: await headers(),
     });
     const { user } = await res.json();
-    console.log(user);
 
     return (
         <Container>
@@ -28,8 +28,9 @@ const Dashboard = async () => {
             </div>
             <div className="flex flex-col md:flex-row gap-2 mt-6">
                 <ShareLink username={user?.username} />
-                <UpdateProfileBtn />
                 <SignOut />
+                <UpdateProfileBtn />
+                <DeleteAccount />
             </div>
 
             <ToggleAcceptMessages isAcceptingMessages={user.isAcceptingMessages} />

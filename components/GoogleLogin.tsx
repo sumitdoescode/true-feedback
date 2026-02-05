@@ -4,7 +4,7 @@ import { authClient } from "@/lib/auth-client";
 
 const GoogleLogin = () => {
     const loginWithGoogle = async () => {
-        const data = await authClient.signIn.social({
+        await authClient.signIn.social({
             provider: "google",
             callbackURL: "/dashboard",
         });

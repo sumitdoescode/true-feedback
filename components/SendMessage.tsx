@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { MessageSchema, MessageType } from "@/schemas/message.schema";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { CircleAlert } from "lucide-react";
 import { sendMessage } from "@/app/actions/message.action";
 import { toast } from "sonner";
