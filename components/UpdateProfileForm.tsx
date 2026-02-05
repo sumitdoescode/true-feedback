@@ -4,23 +4,32 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UpdateProfileSchema, UpdateProfileType } from "@/schemas/profile.schema";
 import { UpdateProfile } from "@/app/actions/profile.action";
 import { flattenError } from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
-import { authClient } from "@/lib/auth-client";
+import axios from "axios";
 
-export function UpdateProfileForm({ username }: { username: string | null | undefined }) {
+export function UpdateProfileForm() {
     const router = useRouter();
-
     const [formData, setFormData] = useState<UpdateProfileType>({
-        username: username || "",
+        username: "",
     });
+
     const [error, setError] = useState<{ username?: string[] }>({});
     const [isPending, setIsPending] = useState(false);
+
+    useEffect(() => {
+        const getUser = async () => {
+            const { data } = await axios.get("/api/user");
+            setFormData({ ...formData, username: data.user.username });
+        };
+
+        getUser();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

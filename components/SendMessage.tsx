@@ -1,11 +1,11 @@
 "use client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useActionState, useState, startTransition, useEffect } from "react";
+import { useState } from "react";
 import { MessageSchema, MessageType } from "@/schemas/message.schema";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { CircleAlert } from "lucide-react";
-import { sendMessage, SendMessageState } from "@/app/actions/message.action";
+import { sendMessage } from "@/app/actions/message.action";
 import { toast } from "sonner";
 import { BadgeCheckIcon } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
@@ -16,14 +16,7 @@ const SendMessage = ({ username }: { username: string }) => {
     const [errors, setErrors] = useState<{ content?: string[] }>({});
     const [success, setSuccess] = useState<boolean>(false);
     const [generating, setGenerating] = useState<boolean>(false);
-
-    const initialState: SendMessageState = {
-        success: false,
-        message: "",
-        error: {},
-    };
-
-    const [state, action, isPending] = useActionState<SendMessageState, MessageType>(sendMessage, initialState);
+    const [isSending, setIsSending] = useState<boolean>(false);
 
     const generateMessage = async () => {
         try {
@@ -41,23 +34,6 @@ const SendMessage = ({ username }: { username: string }) => {
         }
     };
 
-    useEffect(() => {
-        if (!state) return;
-        if (!state.success) {
-            if (state.error) {
-                setErrors(state.error);
-                return;
-            }
-            if (state.message) {
-                toast.error(state.message);
-                return;
-            }
-        }
-        toast.success(state.message);
-        setSuccess(true);
-        setFormData({ content: "", to: username });
-    }, [state]);
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -69,9 +45,22 @@ const SendMessage = ({ username }: { username: string }) => {
             return;
         }
 
-        startTransition(() => {
-            action(result.data);
-        });
+        // call the sendMessage action function
+        setIsSending(true);
+        const res = await sendMessage(result.data);
+        setIsSending(false);
+        if (!res.success) {
+            if (res.error) {
+                setErrors(res.error);
+            }
+            if (res.message) {
+                toast.error(res.message);
+            }
+            return;
+        }
+        toast.success(res.message);
+        setSuccess(true);
+        setFormData({ content: "", to: username });
     };
     return (
         <div className="mt-8">
@@ -97,8 +86,8 @@ const SendMessage = ({ username }: { username: string }) => {
                         );
                     })}
                 <div className="flex items-center mt-4 gap-2 ">
-                    <Button type="submit" className="grow cursor-pointer" size={"lg"} variant={"default"} disabled={isPending || generating}>
-                        {isPending ? (
+                    <Button type="submit" className="grow cursor-pointer" size={"lg"} variant={"default"} disabled={isSending || generating}>
+                        {isSending ? (
                             <>
                                 Sending...
                                 <Spinner />
@@ -107,7 +96,7 @@ const SendMessage = ({ username }: { username: string }) => {
                             "Send"
                         )}
                     </Button>
-                    <Button className="grow cursor-pointer" size={"lg"} variant={"secondary"} onClick={generateMessage} disabled={generating || isPending}>
+                    <Button className="grow cursor-pointer" size={"lg"} variant={"secondary"} onClick={generateMessage} disabled={generating || isSending}>
                         {generating ? (
                             <>
                                 Generating...
@@ -125,7 +114,7 @@ const SendMessage = ({ username }: { username: string }) => {
                         <BadgeCheckIcon className="size-5 text-green-300" />
                     </ItemMedia>
                     <ItemContent className="grow">
-                        <ItemTitle className="text-green-300">{state.message}</ItemTitle>
+                        <ItemTitle className="text-green-300">Message Send Successfully</ItemTitle>
                     </ItemContent>
                 </Item>
             )}
