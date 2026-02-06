@@ -5,12 +5,16 @@ import ToggleAcceptMessages from "@/components/ToggleAcceptMessages";
 import UserMessages from "@/components/UserMessages";
 import UpdateProfileBtn from "@/components/UpdateProfileBtn";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import DeleteAccount from "@/components/DeleteAccount";
 
 const Dashboard = async () => {
+    const cookieStore = await cookies();
+    const cookieHeader = cookieStore.toString();
     const res = await fetch(`${process.env.APPLICATION_BASE_URL}/api/user`, {
-        headers: await headers(),
+        headers: {
+            cookie: cookieHeader,
+        },
     });
     const { user } = await res.json();
 
