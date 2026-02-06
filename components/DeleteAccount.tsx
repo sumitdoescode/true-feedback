@@ -1,11 +1,15 @@
 "use client";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { Spinner } from "./ui/spinner";
 
 const DeleteAccount = () => {
+    const [isDeleting, setIsDeleting] = useState(false);
     const deleteAccount = async () => {
+        setIsDeleting(true);
         await authClient.deleteUser({});
+        setIsDeleting(false);
         window.location.href = "/";
     };
 
@@ -19,7 +23,15 @@ const DeleteAccount = () => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={deleteAccount}>Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={deleteAccount}>
+                        {isDeleting ? (
+                            <>
+                                Deleting... <Spinner />
+                            </>
+                        ) : (
+                            "Delete"
+                        )}
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
