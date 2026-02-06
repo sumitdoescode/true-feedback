@@ -7,7 +7,7 @@ const DashboardSkeleton = () => {
             <Container>
                 <div className="space-y-8">
                     {/* Profile Row */}
-                    <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-6">
                         <Skeleton className="w-28 h-28 rounded-full" />
 
                         <div className="space-y-3">
@@ -18,20 +18,20 @@ const DashboardSkeleton = () => {
 
                     {/* Buttons */}
                     <div className="flex flex-col md:flex-row gap-2">
-                        <Skeleton className="h-10 w-44" />
-                        <Skeleton className="h-10 w-36" />
-                        <Skeleton className="h-10 w-28" />
+                        <Skeleton className="h-8 w-44" />
+                        <Skeleton className="h-8 w-36" />
+                        <Skeleton className="h-8 w-28" />
+                        <Skeleton className="h-8 w-28" />
                     </div>
 
                     {/* Toggle */}
-                    <Skeleton className="h-12 w-64" />
+                    <Skeleton className="h-9 w-64" />
 
                     {/* Messages */}
                     <div className="grid md:grid-cols-2 gap-6">
                         {[1, 2, 3].map((i) => (
                             <div key={i} className="space-y-4">
-                                <Skeleton className="h-20 w-full" />
-                                <Skeleton className="h-6 w-16" />
+                                <Skeleton className="h-28 w-full" />
                             </div>
                         ))}
                     </div>

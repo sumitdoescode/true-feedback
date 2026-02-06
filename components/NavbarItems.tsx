@@ -13,7 +13,7 @@ const NavbarItems = async () => {
     if (!session?.user) {
         return (
             <div className="flex items-center gap-2">
-                <Button className="" variant="secondary">
+                <Button className="" variant="outline">
                     <Link href="/login">Get Started</Link>
                 </Button>
             </div>
