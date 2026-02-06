@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 import { deleteMessage } from "@/app/actions/message.action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Spinner } from "./ui/spinner";
 
 const DeleteMessage = ({ messageId }: { messageId: string }) => {
     const [isPending, startTransition] = useTransition();
@@ -33,7 +34,13 @@ const DeleteMessage = ({ messageId }: { messageId: string }) => {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={handleDeleteMessage} disabled={isPending}>
-                        Continue
+                        {isPending ? (
+                            <>
+                                Deleting... <Spinner />
+                            </>
+                        ) : (
+                            "Delete"
+                        )}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

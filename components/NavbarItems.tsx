@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import UserButton from "./UserButton";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const NavbarItems = async () => {
+export const NavbarItems = async () => {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
@@ -33,4 +34,10 @@ const NavbarItems = async () => {
     );
 };
 
-export default NavbarItems;
+export const NavbarItemsSkeleton = () => {
+    return (
+        <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-24" />
+        </div>
+    );
+};
