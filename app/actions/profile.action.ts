@@ -5,7 +5,6 @@ import { connectDB } from "@/lib/db";
 import { UpdateProfileSchema, UpdateProfileType } from "@/schemas/profile.schema";
 import { flattenError } from "zod";
 import User from "@/models/User";
-import { NextResponse } from "next/server";
 
 export async function UpdateProfile(formData: UpdateProfileType) {
     try {
@@ -46,7 +45,7 @@ export async function UpdateProfile(formData: UpdateProfileType) {
 
         return { success: true, message: "Username updated successfully" };
     } catch (error: any) {
-        return { success: false, message: error.message };
+        return { success: false, message: error instanceof Error ? error.message : "Internal Server Error" };
     }
 }
 

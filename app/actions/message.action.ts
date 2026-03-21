@@ -32,8 +32,8 @@ export async function sendMessage(formData: MessageType) {
         await message.save();
 
         return { success: true, message: "Message sent successfully" };
-    } catch (error: any) {
-        return { success: false, message: error.message || "Something went wrong" };
+    } catch (error) {
+        return { success: false, message: error instanceof Error ? error.message : "Internal Server Error" };
     }
 }
 
@@ -65,7 +65,7 @@ export async function deleteMessage({ messageId }: { messageId: string }) {
         await message.deleteOne();
 
         return { success: true, message: "Message deleted successfully" };
-    } catch (error: any) {
-        return { success: false, message: error.message || "Something went wrong" };
+    } catch (error) {
+        return { success: false, message: error instanceof Error ? error.message : "Internal Server Error" };
     }
 }

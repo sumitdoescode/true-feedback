@@ -1,13 +1,13 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import { Schema, model, models, type Document, type ObjectId, InferSchemaType } from "mongoose";
 
-export interface IMessage extends mongoose.Document {
+export interface IMessage extends Document {
     content: string;
-    receiver: string;
+    receiver: ObjectId;
     createdAt: Date;
     updatedAt: Date;
 }
 
-const messageSchema = new mongoose.Schema(
+const messageSchema = new Schema(
     {
         content: {
             type: String,
