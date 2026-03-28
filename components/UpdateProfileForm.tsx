@@ -6,12 +6,11 @@ import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from 
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { UpdateProfileSchema, UpdateProfileType } from "@/schemas/profile.schema";
-import { UpdateProfile } from "@/app/actions/profile.action";
 import { flattenError } from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export function UpdateProfileForm() {
     const router = useRouter();
@@ -25,7 +24,7 @@ export function UpdateProfileForm() {
     useEffect(() => {
         const getUser = async () => {
             const { data } = await axios.get("/api/user");
-            setFormData({ ...formData, username: data.user.username });
+            setFormData((prev) => ({ ...prev, username: data.user.username }));
         };
 
         getUser();
@@ -40,22 +39,25 @@ export function UpdateProfileForm() {
             return setError(flattenError(result.error).fieldErrors);
         }
 
-        // calling the action function
-        setIsPending(true);
-        const res = await UpdateProfile(result.data);
-        setIsPending(false);
-        if (!res.success) {
-            if (res.error) {
-                setError(res.error);
-            }
-            if (res.message) {
-                toast.error(res.message);
-            }
-            return;
-        }
+        try {
+            setIsPending(true);
+            const { data: res } = await axios.patch("/api/user", {
+                username: result.data.username,
+            });
 
-        toast.success(res.message);
-        router.push("/dashboard");
+            toast.success(res.message);
+            router.push("/dashboard");
+        } catch (error) {
+            const response = error instanceof AxiosError ? error.response?.data : null;
+
+            if (response?.error) {
+                setError(response.error);
+            }
+
+            toast.error(response?.message || "Failed to update username");
+        } finally {
+            setIsPending(false);
+        }
     };
 
     return (

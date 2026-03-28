@@ -19,12 +19,12 @@ const UserProfile = async ({ username }: { username: string }) => {
         <Container>
             <div className="flex items-center gap-6">
                 <Avatar className="w-28 h-28">
-                    <AvatarImage src={user.image} alt={`@${user.username}`} />
+                    <AvatarImage alt={`@${user.username}`} />
                     <AvatarFallback>{user.username[0]}</AvatarFallback>
                 </Avatar>
                 <div>
-                    <h1 className="text-3xl font-semibold text-neutral-200">{user.name}</h1>
-                    <p className="text-neutral-300 text-base">@{user.username}</p>
+                    <h1 className="text-3xl font-semibold text-neutral-200">@{user.username}</h1>
+                    <p className="text-neutral-300 text-base">Send an anonymous message</p>
                 </div>
             </div>
 
@@ -37,7 +37,7 @@ const UserProfile = async ({ username }: { username: string }) => {
                         <OctagonX className="size-6" />
                     </ItemMedia>
                     <ItemContent className="grow">
-                        <ItemTitle className="text-neutral-200 text-base">{user.name} is currently not accepting messages</ItemTitle>
+                        <ItemTitle className="text-neutral-200 text-base">@{user.username} is currently not accepting messages</ItemTitle>
                     </ItemContent>
                 </Item>
             )}

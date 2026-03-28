@@ -3,22 +3,23 @@ import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const ToggleAcceptMessages = ({ isAcceptingMessages }: { isAcceptingMessages: boolean }) => {
     const [acceptingMessages, setAcceptingMessages] = useState<boolean>(isAcceptingMessages);
 
     const toggleAcceptMessages = async () => {
         try {
-            const { data } = await axios.patch("/api/user");
+            const { data } = await axios.patch("/api/user/toggle-accept-messages");
             if (!data.success) {
                 toast.error(data.message);
                 setAcceptingMessages((prev) => !prev);
                 return;
             }
-            toast.success(data.data.isAcceptingMessages ? "Accepting messages enabled" : "Accepting messages disabled");
-        } catch (error: any) {
-            toast.error(error.message || "Something went wrong");
+            toast.success(data.isAcceptingMessages ? "Accepting messages enabled" : "Accepting messages disabled");
+        } catch (error) {
+            const response = error instanceof AxiosError ? error.response?.data : null;
+            toast.error(response?.message || "Something went wrong");
             setAcceptingMessages((prev) => !prev);
         }
     };

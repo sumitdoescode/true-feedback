@@ -2,17 +2,16 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { MessageSchema, MessageType } from "@/schemas/message.schema";
+import { SendMessageSchema, SendMessageType } from "@/schemas/message.schema";
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { CircleAlert } from "lucide-react";
-import { sendMessage } from "@/app/actions/message.action";
 import { toast } from "sonner";
 import { BadgeCheckIcon } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import axios from "axios";
 
 const SendMessage = ({ username }: { username: string }) => {
-    const [formData, setFormData] = useState<MessageType>({ content: "", to: username });
+    const [formData, setFormData] = useState<SendMessageType>({ content: "", to: username });
     const [errors, setErrors] = useState<{ content?: string[] }>({});
     const [success, setSuccess] = useState<boolean>(false);
     const [generating, setGenerating] = useState<boolean>(false);
@@ -38,7 +37,7 @@ const SendMessage = ({ username }: { username: string }) => {
         e.preventDefault();
 
         // client side validation
-        const result = MessageSchema.safeParse(formData);
+        const result = SendMessageSchema.safeParse(formData);
 
         if (!result.success) {
             setErrors(result.error.flatten().fieldErrors);
@@ -47,18 +46,18 @@ const SendMessage = ({ username }: { username: string }) => {
 
         // call the sendMessage action function
         setIsSending(true);
-        const res = await sendMessage(result.data);
+        const { data } = await axios.post(`/api/message`, result.data);
         setIsSending(false);
-        if (!res.success) {
-            if (res.error) {
-                setErrors(res.error);
+        if (!data.success) {
+            if (data.error) {
+                setErrors(data.error);
             }
-            if (res.message) {
-                toast.error(res.message);
+            if (data.message) {
+                toast.error(data.message);
             }
             return;
         }
-        toast.success(res.message);
+        toast.success(data.message);
         setSuccess(true);
         setFormData({ content: "", to: username });
     };

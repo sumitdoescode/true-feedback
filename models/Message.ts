@@ -2,7 +2,7 @@ import { Schema, model, models, type Document, type ObjectId, InferSchemaType } 
 
 export interface IMessage extends Document {
     content: string;
-    receiver: ObjectId;
+    receiver: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -15,8 +15,8 @@ const messageSchema = new Schema(
             trim: true,
         },
         receiver: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
+            type: String,
+            required: true,
         },
     },
     { timestamps: true },

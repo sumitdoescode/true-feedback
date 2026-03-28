@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-export const MessageSchema = z.object({
+export const SendMessageSchema = z.object({
     content: z.string().min(5, "Message must be at least 5 characters long").max(1000, "Message must be at most 1000 characters long"),
-    to: z.string().min(1, "To is required").max(16, "To must be at most 16 characters long"),
+    to: z.string().min(1, "Username is required"),
 });
 
-export type MessageType = z.infer<typeof MessageSchema>;
+export type SendMessageType = z.infer<typeof SendMessageSchema>;
