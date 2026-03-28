@@ -19,7 +19,7 @@ const UserProfile = async ({ username }: { username: string }) => {
         <Container>
             <div className="flex items-center gap-6">
                 <Avatar className="w-28 h-28">
-                    <AvatarImage alt={`@${user.username}`} />
+                    <AvatarImage src={user.image} alt={`@${user.username}`} />
                     <AvatarFallback>{user.username[0]}</AvatarFallback>
                 </Avatar>
                 <div>

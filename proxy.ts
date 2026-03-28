@@ -16,7 +16,7 @@ export async function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
-    // that means user is on trying to get on other pages
+    // that means user is on trying to get on other pages (protected pages)
     if (!session?.user) {
         return NextResponse.redirect(new URL("/login", request.url));
     }

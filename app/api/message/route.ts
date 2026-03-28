@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ success: false, message: "This user is not accepting messages" }, { status: 403 });
         }
 
-        const message = await Message.create({ content, receiver: user.id });
+        const message = await Message.create({ content, receiver: user._id });
 
         await message.save();
 

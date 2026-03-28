@@ -2,19 +2,23 @@
 import { useTransition } from "react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Trash2 } from "lucide-react";
-import { deleteMessage } from "@/app/actions/message.action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Spinner } from "./ui/spinner";
+import axios from "axios";
 
 const DeleteMessage = ({ messageId }: { messageId: string }) => {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
-    const handleDeleteMessage = () => {
-        startTransition(() => {
-            deleteMessage({ messageId });
-            toast.success("Message deleted successfully");
+    const handleDeleteMessage = async () => {
+        startTransition(async () => {
+            const { data } = await axios.delete(`/api/message/${messageId}`);
+            if (!data.success) {
+                toast.error(data.message);
+                return;
+            }
+            toast.success(data.message);
             router.refresh();
         });
     };

@@ -1,12 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import axios, { AxiosError } from "axios";
 
-const ToggleAcceptMessages = ({ isAcceptingMessages }: { isAcceptingMessages: boolean }) => {
-    const [acceptingMessages, setAcceptingMessages] = useState<boolean>(isAcceptingMessages);
+const ToggleAcceptMessages = ({ isAcceptingMessages }: { isAcceptingMessages?: boolean }) => {
+    const [acceptingMessages, setAcceptingMessages] = useState<boolean>(Boolean(isAcceptingMessages));
+
+    useEffect(() => {
+        setAcceptingMessages(Boolean(isAcceptingMessages));
+    }, [isAcceptingMessages]);
 
     const toggleAcceptMessages = async () => {
         try {
@@ -16,7 +20,7 @@ const ToggleAcceptMessages = ({ isAcceptingMessages }: { isAcceptingMessages: bo
                 setAcceptingMessages((prev) => !prev);
                 return;
             }
-            toast.success(data.isAcceptingMessages ? "Accepting messages enabled" : "Accepting messages disabled");
+            toast.success(data.data.isAcceptingMessages ? "Accepting messages enabled" : "Accepting messages disabled");
         } catch (error) {
             const response = error instanceof AxiosError ? error.response?.data : null;
             toast.error(response?.message || "Something went wrong");

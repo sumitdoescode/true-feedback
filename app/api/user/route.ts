@@ -90,26 +90,26 @@ export async function PATCH(request: NextRequest) {
 
 // DELETE => /api/user
 // this route is used to delete user
-export async function DELETE() {
-    try {
-        await connectDB();
-        const session = await auth.api.getSession({
-            headers: await headers(),
-        });
-        const user = session?.user;
-        if (!user) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
-        }
+// export async function DELETE() {
+//     try {
+//         await connectDB();
+//         const session = await auth.api.getSession({
+//             headers: await headers(),
+//         });
+//         const user = session?.user;
+//         if (!user) {
+//             return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+//         }
 
-        await auth.api.deleteUser({
-            body: {
-                callbackURL: "/",
-            },
-            headers: await headers(),
-        });
+//         await auth.api.deleteUser({
+//             body: {
+//                 callbackURL: "/",
+//             },
+//             headers: await headers(),
+//         });
 
-        return NextResponse.json({ success: true, message: "Profile deleted successfully" }, { status: 200 });
-    } catch (error: unknown) {
-        return NextResponse.json({ success: false, message: error instanceof Error ? error.message : "Internal Server Error" }, { status: 500 });
-    }
-}
+//         return NextResponse.json({ success: true, message: "Profile deleted successfully" }, { status: 200 });
+//     } catch (error: unknown) {
+//         return NextResponse.json({ success: false, message: error instanceof Error ? error.message : "Internal Server Error" }, { status: 500 });
+//     }
+// }

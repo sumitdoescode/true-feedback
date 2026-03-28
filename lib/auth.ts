@@ -4,6 +4,7 @@ import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import Message from "@/models/Message";
 import { connectDB } from "./db";
 import { username } from "better-auth/plugins";
+import { ObjectId } from "mongodb";
 
 const client = new MongoClient(process.env.MONGODB_URI!);
 export const db = client.db();
@@ -27,9 +28,8 @@ export const auth = betterAuth({
                         .replace(/[^a-z._]/g, "_")
                         .replace(/[._]{2,}/g, "_")
                         .replace(/^[._]+|[._]+$/g, "");
-                    const usernameBase = normalizedPrefix || "user";
-                    const username = `${usernameBase}_${user.id.slice(0, 6).toLowerCase()}`;
-                    await db.collection("user").updateOne({ id: user.id as any }, { $set: { username } });
+                    const username = normalizedPrefix || "user";
+                    await db.collection("user").updateOne({ _id: new ObjectId(user.id) }, { $set: { username } });
                 },
             },
             delete: {

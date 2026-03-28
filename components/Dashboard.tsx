@@ -5,24 +5,24 @@ import ToggleAcceptMessages from "@/components/ToggleAcceptMessages";
 import UserMessages from "@/components/UserMessages";
 import UpdateProfileBtn from "@/components/UpdateProfileBtn";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cookies } from "next/headers";
 import DeleteAccount from "@/components/DeleteAccount";
+import { cookies } from "next/headers";
 
 const Dashboard = async () => {
     const cookieStore = await cookies();
-    const cookieHeader = cookieStore.toString();
     const res = await fetch(`${process.env.APPLICATION_BASE_URL}/api/user`, {
         headers: {
-            cookie: cookieHeader,
+            Cookie: cookieStore.toString(),
         },
     });
-    const { user } = await res.json();
+    const data = await res.json();
+    const { user } = data;
 
     return (
         <Container>
             <div className="flex items-center gap-8">
                 <Avatar className="w-28 h-28">
-                    <AvatarImage src={user.image} alt={`@${user.username}`} />
+                    <AvatarImage src={user.image || ""} alt={`@${user.username}`} />
                     <AvatarFallback>{user.username[0]}</AvatarFallback>
                 </Avatar>
                 <div>
