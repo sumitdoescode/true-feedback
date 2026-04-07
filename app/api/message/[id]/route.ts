@@ -1,14 +1,13 @@
-import { GoogleGenAI } from "@google/genai";
 import { NextResponse, type NextRequest } from "next/server";
 import { connectDB } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Message from "@/models/Message";
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 
 // DELETE => /api/message/[id]
 // this route is used to delete a message
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         await connectDB();
         const { id } = await params;
@@ -26,7 +25,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
             return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
         }
 
-        const deleted = await Message.findByIdAndDelete({ _id: id, receiver: user.id });
+        const deleted = await Message.findOneAndDelete({ _id: new Types.ObjectId(id), receiver: new Types.ObjectId(user.id) });
         if (!deleted) {
             return NextResponse.json({ success: false, message: "Message not found or unauthorized" }, { status: 404 });
         }

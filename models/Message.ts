@@ -1,11 +1,4 @@
-import { Schema, model, models, type Document, type ObjectId, InferSchemaType } from "mongoose";
-
-export interface IMessage extends Document {
-    content: string;
-    receiver: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import { Schema, model, models, InferSchemaType } from "mongoose";
 
 const messageSchema = new Schema(
     {
@@ -15,13 +8,15 @@ const messageSchema = new Schema(
             trim: true,
         },
         receiver: {
-            type: String,
+            type: Schema.Types.ObjectId,
             required: true,
         },
     },
     { timestamps: true },
 );
 
-const Message = models.Message || model("Message", messageSchema);
+export type IMessage = InferSchemaType<typeof messageSchema>;
+
+const Message = models.Message || model<IMessage>("Message", messageSchema);
 
 export default Message;
