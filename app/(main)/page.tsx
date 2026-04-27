@@ -22,7 +22,7 @@ export default function Home() {
                     {/* buttons */}
                     <div className="flex items-center max-w-xl mx-auto justify-center mt-2 sm:mt-6">
                         <Link href="/login" className="w-full">
-                            <Button className={"text-base w-full rounded-full"} size={"lg"} variant={"default"}>
+                            <Button className="w-full cursor-pointer rounded-full text-base" size={"lg"} variant={"default"}>
                                 Get Started
                             </Button>
                         </Link>

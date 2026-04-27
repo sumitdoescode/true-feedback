@@ -4,7 +4,7 @@ import DashboardSkeleton from "@/components/DashboardSkeleton";
 
 const page = async () => {
     return (
-        <section className="py-10 grow">
+        <section className="grow py-10">
             <Suspense fallback={<DashboardSkeleton />}>
                 <Dashboard />
             </Suspense>
